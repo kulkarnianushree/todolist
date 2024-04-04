@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1 style="background-color: brown;text-align: center;color: aliceblue;font-family: Verdana, Geneva, Tahoma, sans-serif;">My TODo App</h1>
+        <p style="color: coral;text-align: left;"><h3>Welcome to the App and make your Today work List</h3></p>
+        <label for="workList"></label>
+        <form id="workList">
+            <label for="list">List:</label> 
+            <input id="list" type="text">
+            <label for="description">Description:</label> 
+            <input type="text" id="description">
+            <button type="button" id="submit">Add</button> 
+            <ul id="AddedTask"></ul> 
+        </form>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.1/axios.min.js"></script>
+        <script>
+            document.getElementById("submit").addEventListener("click", addToList);
+
+            function addToList(event) {
+                event.preventDefault();
+                const obj = {
+                    "name": document.getElementById("list").value,
+                    "Description": document.getElementById("description").value
+                };
+
+                axios.post("https://crudcrud.com/api/b84d7a7f94054c76aca3cd09262edf9e/todolist", obj)
+                    .then((result) => {
+                        console.log(result.data);
+                        
+                        addToUI(obj);
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                axios.delete("https://crudcrud.com/api/b84d7a7f94054c76aca3cd09262edf9e/todolist/660e5327b6787603e855b7dd")
+                .then((result)=>{
+                    console.log(result.data)
+                }).catch((error)=>{
+                    console.log(error)
+                })
+            }
+
+            function addToUI(task) {
+                const list = document.getElementById("AddedTask");
+                const listItem = document.createElement("li");
+                listItem.textContent = `${task.name} - ${task.Description}`;
+
+                const tickone = document.createElement("button");
+                tickone.textContent = "Done";
+                tickone.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    
+                });
+
+                const crossone = document.createElement("button");
+                crossone.textContent = "Delete";
+                crossone.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    listItem.remove()
+                    
+                });
+
+                listItem.appendChild(tickone);
+                listItem.appendChild(crossone);
+                list.appendChild(listItem);
+            }
+        </script>
+    </body>
+</html>
+
